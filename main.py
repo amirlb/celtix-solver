@@ -12,9 +12,11 @@ for k, v in coords_by_color.items():
 solution = solve_puzzle(coords_by_color)
 for x, y, direction in solution:
     if direction == 'H':
+        print(f"Horizontal wall at {x}.5,{y}.5")
         start = (round(ax + (x + 0.2) * bx), round(ay + (y + 0.5) * by))
         end = (round(ax + (x + 0.8) * bx), round(ay + (y + 0.5) * by))
     else:
+        print(f"Vertical wall at {x}.5,{y}.5")
         start = (round(ax + (x + 0.5) * bx), round(ay + (y + 0.2) * by))
         end = (round(ax + (x + 0.5) * bx), round(ay + (y + 0.8) * by))
     cv.line(output, start, end, (0, 0, 255), 3)
