@@ -1,5 +1,8 @@
+import sys
+
 import mip
 import networkx as nx
+
 
 def get_matches(x, y, d):
     if d == 'H':
@@ -11,6 +14,7 @@ def get_matches(x, y, d):
 
 def build_base_model(width, height, n_colors):
     print(f"Building {width}x{height} model with {n_colors} colors")
+    sys.stdout.flush()
     m = mip.Model("celtix")
     color_vars = [
         [
@@ -105,6 +109,7 @@ def solve_puzzle(coords_by_color):
     m, cross_vars = build_model(coords_by_color, width, height)
     while True:
         print("Solving model")
+        sys.stdout.flush()
         m.optimize()
 
         walls = []
@@ -116,6 +121,7 @@ def solve_puzzle(coords_by_color):
                     if vars[1].x >= 0.99:
                         walls.append((x, y, 'V'))
         print(f"Tentative solution with {len(walls)} walls")
+        sys.stdout.flush()
 
         loops = find_loops(width, height, walls)
         if len(loops) == len(coords_by_color):
@@ -135,3 +141,4 @@ def solve_puzzle(coords_by_color):
                 for loop in color_loops:
                     print(f"Adding constraint against", color, "loop", loop)
                     m += anti_loop_constraint(cross_vars, loop)
+        sys.stdout.flush()

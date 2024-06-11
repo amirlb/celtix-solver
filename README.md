@@ -17,7 +17,7 @@ Run the solver:
 
     python3 main.py examples/board_screenshot.png
 
-Wait for 10-20 seconds so it finds a solution.
+Wait for 1-5 minutes so it finds a solution.
 
 And then view the results:
 

@@ -9,6 +9,7 @@ image_path = sys.argv[1]
 coords_by_color, output, ax, bx, ay, by = detect_pips(image_path)
 for k, v in coords_by_color.items():
     print(f"{str(k):20} {v}")
+sys.stdout.flush()
 solution = solve_puzzle(coords_by_color)
 for x, y, direction in solution:
     if direction == 'H':

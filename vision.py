@@ -6,8 +6,8 @@ def fix_coord(values):
     values = list(values)
     lo, hi = min(values), max(values)
     best = {'score': np.inf}
-    for start in range(10):
-        for end in range(start + 1, 30):
+    for start in range(2):
+        for end in range(start + 8, 30):
             b = (hi - lo) / (end - start)
             a = lo - start * b
             opts = a + np.arange(30) * b
@@ -31,7 +31,7 @@ def detect_pips(filename):
     y_coords, ay, by = fix_coord([y for _, y, _ in circles])
     by_color = defaultdict(list)
     for (x, y, _), x_coord, y_coord in zip(circles, x_coords, y_coords):
-        color = src[int(y), int(x)]
+        color = src[round(y), round(x)]
         color_tuple = tuple(map(int, color))
         by_color[color_tuple].append((x_coord, y_coord))
     return by_color, cv.cvtColor(gray, cv.COLOR_GRAY2BGR), ax, bx, ay, by
