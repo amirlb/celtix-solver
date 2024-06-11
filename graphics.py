@@ -55,9 +55,14 @@ def parse_image(image):
     height += height % 2
     return Puzzle(width, height, dict(pips)), grid
 
-def draw_solution(image, grid, solution):
+def to_faded_grayscale(image):
+    # There's got to be a better way...
     output = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-    output = cv.convertScaleAbs(output, alpha=0.5, beta=96)
+    output = cv.cvtColor(output, cv.COLOR_GRAY2BGR)
+    return cv.convertScaleAbs(output, alpha=0.5, beta=96)
+
+def draw_solution(image, grid, solution):
+    output = to_faded_grayscale(image)
     for wall in solution:
         if wall.orientation == Orientation.horizontal:
             dx, dy = 0.3, 0.0

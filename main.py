@@ -12,7 +12,7 @@ if len(sys.argv) != 2 or not os.path.exists(sys.argv[1]):
     print(f"  The puzzle file can be either a PNG screenshot or CSV", file=sys.stderr)
     sys.exit(1)
 
-if open(sys.argv[1], "rb").read(6).decode("latin1").lower() == "cetrix":
+if open(sys.argv[1], "rb").read(6).decode("latin1").lower() == "celtix":
 
     puzzle = parse_csv_puzzle(open(sys.argv[1]))
     print(puzzle)

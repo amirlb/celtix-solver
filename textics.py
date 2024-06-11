@@ -6,7 +6,7 @@ from common import *
 
 def parse_csv_puzzle(f):
     rows = [[x.strip().lower() for x in row] for row in csv.reader(f)]
-    assert rows[0][0] == 'cetrix'
+    assert rows[0][0] == 'celtix'
     width, height = map(int, rows[0][1:])
     pips = defaultdict(list)
     for color, x, y in rows[1:]:
