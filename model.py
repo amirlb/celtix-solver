@@ -1,7 +1,7 @@
-import sys
-
 import mip
 import networkx as nx
+
+from common import *
 
 
 def get_matches(x, y, d):
@@ -14,7 +14,6 @@ def get_matches(x, y, d):
 
 def build_base_model(width, height, n_colors):
     print(f"Building {width}x{height} model with {n_colors} colors")
-    sys.stdout.flush()
     m = mip.Model("celtix")
     color_vars = [
         [
@@ -98,18 +97,10 @@ def anti_loop_constraint(cross_vars, loop):
                     anti_loop.append(vars[0] + vars[1])
     return mip.xsum(anti_loop) >= 1
 
-def solve_puzzle(coords_by_color):
-    width = 1 + max(x for coords in coords_by_color.values() for x, _ in coords)
-    if width % 2 == 1:
-        width += 1
-    height = 1 + max(y for coords in coords_by_color.values() for _, y in coords)
-    if height % 2 == 1:
-        height += 1
-
-    m, cross_vars = build_model(coords_by_color, width, height)
+def solve_puzzle(puzzle):
+    m, cross_vars = build_model(puzzle.pips, puzzle.width, puzzle.height)
     while True:
         print("Solving model")
-        sys.stdout.flush()
         m.optimize()
 
         walls = []
@@ -121,15 +112,14 @@ def solve_puzzle(coords_by_color):
                     if vars[1].x >= 0.99:
                         walls.append((x, y, 'V'))
         print(f"Tentative solution with {len(walls)} walls")
-        sys.stdout.flush()
 
-        loops = find_loops(width, height, walls)
-        if len(loops) == len(coords_by_color):
-            return walls
+        loops = find_loops(puzzle.width, puzzle.height, walls)
+        if len(loops) == len(puzzle.pips):
+            return [Wall(x, y, Orientation.horizontal if d == 'H' else Orientation.vertical) for x, y, d in walls]
 
-        loops_by_color = {color: [] for color in coords_by_color.keys()}
+        loops_by_color = {color: [] for color in puzzle.pips.keys()}
         for loop in loops:
-            for color, coords in coords_by_color.items():
+            for color, coords in puzzle.pips.items():
                 if any(coord in loop for coord in coords):
                     loops_by_color[color].append(loop)
                     break
@@ -141,4 +131,3 @@ def solve_puzzle(coords_by_color):
                 for loop in color_loops:
                     print(f"Adding constraint against", color, "loop", loop)
                     m += anti_loop_constraint(cross_vars, loop)
-        sys.stdout.flush()
