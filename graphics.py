@@ -41,7 +41,6 @@ def parse_image(image):
         x_transform=infer_transform([x for x, _, _ in circles]),
         y_transform=infer_transform([y for _, y, _ in circles]),
     )
-    print(grid)
     pips = defaultdict(list)
     for x, y, _ in circles:
         pip_x = best_match(x, grid.x_transform)
@@ -59,7 +58,7 @@ def to_faded_grayscale(image):
     # There's got to be a better way...
     output = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
     output = cv.cvtColor(output, cv.COLOR_GRAY2BGR)
-    return cv.convertScaleAbs(output, alpha=0.5, beta=96)
+    return cv.convertScaleAbs(output, alpha=0.5, beta=128)
 
 def draw_solution(image, grid, solution):
     output = to_faded_grayscale(image)
