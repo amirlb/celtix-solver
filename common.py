@@ -58,3 +58,6 @@ class LinearTransform:
 class Grid:
     x_transform: LinearTransform
     y_transform: LinearTransform
+
+    def apply(self, x, y):
+        return (round(self.x_transform.apply(x)), round(self.y_transform.apply(y)))
